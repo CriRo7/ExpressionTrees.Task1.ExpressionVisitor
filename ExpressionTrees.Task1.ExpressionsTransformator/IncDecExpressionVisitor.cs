@@ -36,9 +36,11 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
             switch (node.NodeType)
             {
                 case ExpressionType.Add:
-                    return Expression.Increment(Visit(node.Left));
+                    var expressionInc = Visit(node.Left);
+                    return Expression.Increment(expressionInc);
                 case ExpressionType.Subtract:
-                    return Expression.Decrement(Visit(node.Left));
+                    var expressionDec = Visit(node.Left);
+                    return Expression.Decrement(expressionDec);
             }
             return base.VisitBinary(node);
         }

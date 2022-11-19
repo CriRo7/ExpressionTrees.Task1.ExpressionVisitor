@@ -8,7 +8,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace ExpressionTrees.Task1.ExpressionsTransformer
@@ -40,6 +39,7 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
 
             var resultIncExpression = (Expression<Func<Model, int>>)visitor.Modify(expressionInc);
             Console.WriteLine($"Result expressions: Inc: {resultIncExpression}");
+            
             var funcInc = resultIncExpression.Compile();
             Console.WriteLine($"Result: Inc: {funcInc(model)}");
             Console.WriteLine("=================");
@@ -52,6 +52,7 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
 
             var resultDecExpression = (Expression<Func<Model, int>>)visitor.Modify(expressionDec);
             Console.WriteLine($"Result expressions: Dec: {resultDecExpression}");
+            
             var funcDec = resultDecExpression.Compile();
             Console.WriteLine($"Result: Dec: {funcDec(model)}");
             Console.WriteLine("=================");
@@ -62,10 +63,10 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
             Expression<Func<Model, int>> expressionInc = value => value.IntProperty + 1;
             Console.WriteLine($"Input expression: {expressionInc}");
             var dictionary = new Dictionary<string, int>() { {"IntProperty", 5}};
-            Console.WriteLine($"Dictionary <propName: valueToReplace>: {dictionary.ToArray()[0].Key}, {dictionary.ToArray()[0].Value}");
-
+            
             var resultSubstituteExpression = (Expression<Func<Model, int>>) visitor.Modify(expressionInc, dictionary);
             Console.WriteLine($"Result expression: Substitute Inc: {resultSubstituteExpression}");
+            
             var funcSub = resultSubstituteExpression.Compile();
             Console.WriteLine($"Result Substitute: {funcSub(model)}");
             Console.WriteLine("=================");
@@ -79,7 +80,7 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
             IntProperty = intProperty;
             StringProperty = stringProperty;
         }
-        public int IntProperty { get; set; }
-        public string StringProperty { get; set; }
+        public int IntProperty { get; }
+        public string StringProperty { get; }
     }
 }
