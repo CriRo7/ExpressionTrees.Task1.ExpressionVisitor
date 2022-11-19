@@ -3,5 +3,7 @@
     internal class Foo
     {
         // add here some properties
+        public int IntFoo { get; set; }
+        public string StringFoo { get; set; }
     }
 }

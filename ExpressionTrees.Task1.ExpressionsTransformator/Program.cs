@@ -7,6 +7,8 @@
  * The results could be printed in console or checked via Debugger using any Visualizer.
  */
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace ExpressionTrees.Task1.ExpressionsTransformer
 {
@@ -18,8 +20,67 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
             Console.WriteLine();
 
             // todo: feel free to add your code here
+            var model = new Model(10, "model");
+            var visitor = new IncDecExpressionVisitor();
+
+            ProcessIncrement(visitor, model);
+
+            ProcessDecrement(visitor, model);
+
+            ProcessReplace(visitor, model);
 
             Console.ReadLine();
         }
+
+        private static void ProcessIncrement(IncDecExpressionVisitor visitor, Model model)
+        {
+            Expression<Func<Model, int>> expressionInc = value => value.IntProperty + 1;
+            Console.WriteLine($"Input expression: {expressionInc}");
+
+            var resultIncExpression = (Expression<Func<Model, int>>)visitor.Modify(expressionInc);
+            Console.WriteLine($"Result expressions: Inc: {resultIncExpression}");
+            
+            var funcInc = resultIncExpression.Compile();
+            Console.WriteLine($"Result: Inc: {funcInc(model)}");
+            Console.WriteLine("=================");
+        }
+
+        private static void ProcessDecrement(IncDecExpressionVisitor visitor, Model model)
+        {
+            Expression<Func<Model, int>> expressionDec = value => value.IntProperty - 1;
+            Console.WriteLine($"Input expression: {expressionDec}");
+
+            var resultDecExpression = (Expression<Func<Model, int>>)visitor.Modify(expressionDec);
+            Console.WriteLine($"Result expressions: Dec: {resultDecExpression}");
+            
+            var funcDec = resultDecExpression.Compile();
+            Console.WriteLine($"Result: Dec: {funcDec(model)}");
+            Console.WriteLine("=================");
+        }
+
+        private static void ProcessReplace(IncDecExpressionVisitor visitor, Model model)
+        {
+            Expression<Func<Model, int>> expressionInc = value => value.IntProperty + 1;
+            Console.WriteLine($"Input expression: {expressionInc}");
+            var dictionary = new Dictionary<string, int>() { {"IntProperty", 5}};
+            
+            var resultSubstituteExpression = (Expression<Func<Model, int>>) visitor.Modify(expressionInc, dictionary);
+            Console.WriteLine($"Result expression: Substitute Inc: {resultSubstituteExpression}");
+            
+            var funcSub = resultSubstituteExpression.Compile();
+            Console.WriteLine($"Result Substitute: {funcSub(model)}");
+            Console.WriteLine("=================");
+        }
+    }
+
+    class Model
+    {
+        public Model(int intProperty, string stringProperty)
+        {
+            IntProperty = intProperty;
+            StringProperty = stringProperty;
+        }
+        public int IntProperty { get; }
+        public string StringProperty { get; }
     }
 }
